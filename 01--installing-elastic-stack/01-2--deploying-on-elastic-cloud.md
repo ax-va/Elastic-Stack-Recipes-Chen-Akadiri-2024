@@ -1,6 +1,6 @@
 ## Deploying Elastic Stack on the Elastic Cloud
 
-Create a deployment (in my case `ax-va-deployment`)
+Create a deployment (`ax-va-deployment` in my case)
 
 https://cloud.elastic.co/
 
