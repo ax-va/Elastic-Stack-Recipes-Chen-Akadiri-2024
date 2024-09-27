@@ -79,4 +79,4 @@ the enrollment token for Kibana (valid for 30 minutes).
 kibana-8.15.1$ sudo -u elastic ./bin/kibana
 ```
 
-Browser to localhost `http://localhost:5601/...`, set the token, and log in. 
+Browser to localhost `http://localhost:5601/...`, set the enrollment token, and log in. 
