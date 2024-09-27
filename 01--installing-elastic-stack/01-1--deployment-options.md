@@ -11,6 +11,6 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elastics
 Elastic Cloud offers all the features of Elasticsearch, Kibana, and Elastic’s Observability, Enterprise Search, and 
 Elastic Security solutions as a hosted service available on AWS, GCP, and Azure.
 
-- Elasticsearch for Linux and macOS (for free or 30-day trial to try out all the features)
+- Elasticsearch for Linux and macOS (core features for free and 30-day trial to try out all the features)
 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html
