@@ -54,7 +54,7 @@ $ sudo tar -xzf kibana-8.15.1-linux-x86_64.tar.gz
 
 - In order to avoid the error 
 `fatal exception while booting Elasticsearchjava.lang.RuntimeException: can not run elasticsearch as root`,
-create a new user and a new group, and change the owner
+create a new user and a new group, and change the owner for all subdirectories
 ```unix
 $ sudo adduser elastic
 $ sudo chown -R elastic:elastic /bin/elasticsearch/elasticsearch-8.15.1
