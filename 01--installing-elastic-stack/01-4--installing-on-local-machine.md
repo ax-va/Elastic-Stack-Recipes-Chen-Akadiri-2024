@@ -30,7 +30,7 @@ create a `jvm.options.d/jvm.options` file
 $ cd elasticsearch-8.15.1/config
 $ sudo touch jvm.options.d/jvm.options
 ```
-Adjust heap size to 4 GB adding to the file the following lines
+Adjust heap size to 4 GB adding the following lines to the file
 ```
 -Xms4g
 -Xmx4g
