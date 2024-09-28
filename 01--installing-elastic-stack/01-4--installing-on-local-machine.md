@@ -1,6 +1,6 @@
 # Installing a self-managed Elastic Stack
 
-Ensure compatibility with your operating system
+- Ensure compatibility with your operating system
 
 https://www.elastic.co/de/support/matrix
 
