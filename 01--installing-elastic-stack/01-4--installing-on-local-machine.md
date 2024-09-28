@@ -1,18 +1,26 @@
-# Installing a self-managed Elastic Stack on Ubuntu 
+# Installing a self-managed Elastic Stack
 
 Ensure compatibility with your operating system
 
 https://www.elastic.co/de/support/matrix
 
-## Install Elasticsearch
-
-- See how to download Elasticsearch
+- Download Elasticsearch
 
 https://www.elastic.co/downloads/elasticsearch
 
-- Download and unzip `.tar.gz` 
+- Download Kibana
+
+https://www.elastic.co/de/downloads/kibana
+
+# Installing on Ubuntu (22.04. LTS)
+
+## Install Elasticsearch
+
+- How to install
 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html
+
+- Download and unzip `.tar.gz`
 
 ```unix
 $ cd /bin
@@ -39,8 +47,6 @@ Adjust heap size to 4 GB adding the following lines to the file
 ## Install Kibana
 
 - Download and unzip `.tar.gz`
-
-https://www.elastic.co/de/downloads/kibana
 
 ```unix
 $ cd /bin
