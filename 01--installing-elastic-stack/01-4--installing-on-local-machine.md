@@ -16,7 +16,7 @@ https://www.elastic.co/de/downloads/kibana
 
 ## Install Elasticsearch
 
-- How to install
+- How to install on Posix
 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html
 
