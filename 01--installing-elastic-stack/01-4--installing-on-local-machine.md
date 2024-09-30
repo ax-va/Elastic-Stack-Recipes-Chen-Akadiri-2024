@@ -67,15 +67,15 @@ $ sudo chown -R elastic:elastic /bin/elasticsearch/elasticsearch-8.15.1
 $ sudo chown -R elastic:elastic /bin/kibana/kibana-8.15.1
 ```
 
-## Run Elasticsearch
+## Run Elasticsearch (as a single-node cluster)
 
 - Run Elasticsearch
 ```unix
 elasticsearch-8.15.1$ sudo -u elastic ./bin/elasticsearch
 ```
 
-- Securely save a generated password of the elastic user, HTTP CA certificate SHA-256 fingerprint, and  
-the enrollment token for Kibana (valid for 30 minutes).
+- Securely save a generated password of the elastic user, HTTP CA certificate SHA-256 fingerprint, 
+and the enrollment token for Kibana (valid for 30 minutes).
 
 ## Run Kibana
 
@@ -85,4 +85,8 @@ the enrollment token for Kibana (valid for 30 minutes).
 kibana-8.15.1$ sudo -u elastic ./bin/kibana
 ```
 
-Browser to localhost `http://localhost:5601/...`, set the enrollment token, and log in. 
+Browser to localhost `http://localhost:5601/...`, set the enrollment token, and log in.
+
+## How to use a self-managed deployment with Docker
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
