@@ -81,6 +81,12 @@ to avoid the error `Elasticsearch died while starting up, with exit code 137` (s
 remove it completely to avoid skipping security auto-configuration.
 (It appears after the failing node`s first run.)
 
+- If you have not enought storage, add to `elasticsearch.yml`
+```yaml
+xpack.searchable.snapshot.shared_cache.size: 8GB
+xpack.searchable.snapshot.shared_cache.size.max_headroom: 4GB
+```
+
 - If the `elasticsearch.keystore` file exist, remove it completely to avoid aborting auto-configuration.
 (It appears after the failing node`s first run.)
 
@@ -103,4 +109,5 @@ $ sudo -u elastic ./bin/elasticsearch --enrollment-token <enrollment_token>
 
 ## How to set up data tiers on Elastic Cloud
 
+todo
 ...
