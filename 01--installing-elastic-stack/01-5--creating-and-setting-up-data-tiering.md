@@ -55,8 +55,8 @@ $ sudo tar -xzf elasticsearch-8.15.1-linux-x86_64.tar.gz
 
 - Change the owner to another user, because Elasticsearch cannot be run by root
 ```unix
-$ sudo chown -R elastic:elastic /bin/elasticsearch-node-cold/elasticsearch-8.15.1
-$ sudo chown -R elastic:elastic /bin/elasticsearch-node-frozen/elasticsearch-8.15.1
+$ sudo chown -R <username>:<username> /bin/elasticsearch-node-cold/elasticsearch-8.15.1
+$ sudo chown -R <username>:<username> /bin/elasticsearch-node-frozen/elasticsearch-8.15.1
 ```
 
 - Open `elasticseach.yml` for the cold node and add
@@ -83,8 +83,8 @@ remove it completely to avoid skipping security auto-configuration.
 
 - If you don't have enough space on your hard drive, add less space to `elasticsearch.yml` 
 ```yaml
-xpack.searchable.snapshot.shared_cache.size: 8GB
-xpack.searchable.snapshot.shared_cache.size.max_headroom: 4GB
+xpack.searchable.snapshot.shared_cache.size: 8gb
+xpack.searchable.snapshot.shared_cache.size.max_headroom: 512mb
 ```
 
 - If the `elasticsearch.keystore` file exist, remove it completely to avoid aborting auto-configuration.
@@ -99,12 +99,12 @@ $ sudo ./bin/elasticsearch-create-enrollment-token -s node
 - Pass the enrollment token with `--enrollment-token` for the cold node
 ```unix
 $ cd /bin/elasticsearch-node-cold/elasticsearch-8.15.1
-$ sudo -u elastic ./bin/elasticsearch --enrollment-token <enrollment_token>
+$ sudo -u <username> ./bin/elasticsearch --enrollment-token <enrollment_token>
 ```
 and same for the frozen node
 ```unix
 $ cd /bin/elasticsearch-node-frozen/elasticsearch-8.15.1
-$ sudo -u elastic ./bin/elasticsearch --enrollment-token <enrollment_token>
+$ sudo -u <username> ./bin/elasticsearch --enrollment-token <enrollment_token>
 ```
 
 ## How to set up data tiers on Elastic Cloud

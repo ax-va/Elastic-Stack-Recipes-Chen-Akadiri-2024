@@ -36,7 +36,7 @@ $ sudo tar -xzf elasticsearch-8.15.1-linux-x86_64.tar.gz
 create a `jvm.options.d/jvm.options` file
 ```unix
 $ cd elasticsearch-8.15.1/config
-$ sudo touch jvm.options.d/jvm.options
+$ sudo -u <username> touch jvm.options.d/jvm.options
 ```
 Adjust heap size to 4 GB adding the following lines to the file
 ```
@@ -62,16 +62,16 @@ $ sudo tar -xzf kibana-8.15.1-linux-x86_64.tar.gz
 `fatal exception while booting Elasticsearchjava.lang.RuntimeException: can not run elasticsearch as root`,
 create a new user and a new group, and change the owner for all subdirectories
 ```unix
-$ sudo adduser elastic
-$ sudo chown -R elastic:elastic /bin/elasticsearch/elasticsearch-8.15.1
-$ sudo chown -R elastic:elastic /bin/kibana/kibana-8.15.1
+$ sudo adduser <username>
+$ sudo chown -R <username>:<username> /bin/elasticsearch/elasticsearch-8.15.1
+$ sudo chown -R <username>:<username> /bin/kibana/kibana-8.15.1
 ```
 
 ## Run Elasticsearch (as a single-node cluster)
 
 - Run Elasticsearch
 ```unix
-elasticsearch-8.15.1$ sudo -u elastic ./bin/elasticsearch
+elasticsearch-8.15.1$ sudo -u <username> ./bin/elasticsearch
 ```
 
 - Securely save a generated password of the elastic user, HTTP CA certificate SHA-256 fingerprint, 
@@ -82,7 +82,7 @@ and the enrollment token for Kibana (valid for 30 minutes).
 - Run Kibana
 
 ```unix
-kibana-8.15.1$ sudo -u elastic ./bin/kibana
+kibana-8.15.1$ sudo -u <username> ./bin/kibana
 ```
 
 Browser to localhost `http://localhost:5601/...`, set the enrollment token, and log in.
