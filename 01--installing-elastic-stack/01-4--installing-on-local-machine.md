@@ -30,20 +30,6 @@ $ cd elasticsearch
 $ sudo tar -xzf elasticsearch-8.15.1-linux-x86_64.tar.gz
 ```
 
-- Configure `bin/elasticsearch/elasticsearch-8.15.1/config/elasticsearch.yml` to change defaults.
-
-- In order to avoid the error `Elasticsearch died while starting up, with exit code 137`, 
-create a `jvm.options.d/jvm.options` file
-```unix
-$ cd elasticsearch-8.15.1/config
-$ sudo -u <username> touch jvm.options.d/jvm.options
-```
-Adjust heap size to 4 GB adding the following lines to the file
-```
--Xms4g
--Xmx4g
-```
-
 ## Install Kibana
 
 - Download and unzip `.tar.gz`
@@ -60,11 +46,27 @@ $ sudo tar -xzf kibana-8.15.1-linux-x86_64.tar.gz
 
 - In order to avoid the error 
 `fatal exception while booting Elasticsearchjava.lang.RuntimeException: can not run elasticsearch as root`,
-create a new user and a new group, and change the owner for all subdirectories
+create a new user and a new group if necessary, and change the owner for all subdirectories
 ```unix
 $ sudo adduser <username>
 $ sudo chown -R <username>:<username> /bin/elasticsearch/elasticsearch-8.15.1
 $ sudo chown -R <username>:<username> /bin/kibana/kibana-8.15.1
+```
+
+## Prepare settings
+
+- Configure `bin/elasticsearch/elasticsearch-8.15.1/config/elasticsearch.yml` to change defaults if necessary.
+
+- In order to avoid the error `Elasticsearch died while starting up, with exit code 137`, 
+create a `jvm.options.d/jvm.options` file
+```unix
+$ cd elasticsearch-8.15.1/config
+$ sudo -u <username> touch jvm.options.d/jvm.options
+```
+Adjust heap size to 4 GB adding the following lines to the file
+```
+-Xms4g
+-Xmx4g
 ```
 
 ## Run Elasticsearch (as a single-node cluster)
