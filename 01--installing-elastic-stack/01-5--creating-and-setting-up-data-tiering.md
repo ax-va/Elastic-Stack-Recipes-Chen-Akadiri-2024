@@ -10,6 +10,13 @@ is built on searchable snapshots technology and can store twice as much data com
 regulation, compliance, or security use cases; stores most of the data on searchable snapshots 
 and only the necessary data based on query is pulled and cached on a local disk inside the node.
 
+Node roles that match the different data tiers in Elasticsearch:
+
+- `data_hot`
+- `data_warm`
+- `data_cold`
+- `data_frozen`
+
 ## How to add a new node to the cluster
 
 https://www.elastic.co/guide/en/elasticsearch/reference/master/configuring-stack-security.html#stack-enroll-nodes
@@ -110,4 +117,7 @@ $ sudo -u <username> ./bin/elasticsearch --enrollment-token <enrollment_token>
 ## How to set up data tiers on Elastic Cloud
 
 todo
-...
+
+## On ECK
+
+todo
