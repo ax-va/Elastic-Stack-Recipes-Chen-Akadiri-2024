@@ -6,18 +6,18 @@ from pathlib import Path
 with open('../secret.yml', 'r') as file:
     secret = yaml.safe_load(file)
 
-ELASTICSEARCH_DIRS = [
-    Path("/bin/elasticsearch"),
-    Path("/bin/elasticsearch-node-cold"),
-    Path("/bin/elasticsearch-node-frozen"),
-    Path("/bin/elasticsearch-node-master"),
-    Path("/bin/elasticsearch-node-ml"),
-]
+ELASTICSEARCH_DIRS = {
+    "main": Path("/bin/elasticsearch"),
+    "cold": Path("/bin/elasticsearch-node-cold"),
+    "frozen": Path("/bin/elasticsearch-node-frozen"),
+    "master": Path("/bin/elasticsearch-node-master"),
+    "ml": Path("/bin/elasticsearch-node-ml"),
+}
 KIBANA_DIR = Path("/bin/kibana")
 ELASTICSEARCH_PACKAGE = "elasticsearch-8.15.1"
 KIBANA_PACKAGE = "kibana-8.15.1"
 PACKAGE_SPECIFICATION = "-linux-x86_64.tar.gz"
-PATHS_TO_INSTALLED_PACKAGES = [dir_ / ELASTICSEARCH_PACKAGE for dir_ in ELASTICSEARCH_DIRS]
+PATHS_TO_INSTALLED_PACKAGES = [dir_ / ELASTICSEARCH_PACKAGE for dir_ in ELASTICSEARCH_DIRS.values()]
 PATHS_TO_INSTALLED_PACKAGES.extend([KIBANA_DIR / KIBANA_PACKAGE])
 
 
@@ -51,7 +51,7 @@ def delete_all_elastic_stack_elements():
 
 
 def extract_all_elastic_stack_elements_from_tar_gz():
-    for dir_ in ELASTICSEARCH_DIRS:
+    for dir_ in ELASTICSEARCH_DIRS.values():
         filename = ELASTICSEARCH_PACKAGE + PACKAGE_SPECIFICATION
         print("Extracting:", str(dir_ / filename))
         extract_from_tar_gz(dir_, filename)
