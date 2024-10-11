@@ -5,9 +5,9 @@ can also be referenced as the **content tier** for *non-timestamped data*.
 - **Warm tier** is used for less recent timestamped data (more than seven days) that does not need to be updated; 
 extends storage capacity up to five times compared to the hot tier.
 - **Cold tier** is used for timestamped data that is not so frequently accessed and not updated anymore; 
-is built on searchable snapshots technology and can store twice as much data compared to the warm tier.
+is built on searchable *snapshots* technology and can store twice as much data compared to the warm tier.
 - **Frozen tier** is used for timestamped data that is never updated and queried rarely but needs to be kept for 
-regulation, compliance, or security use cases; stores most of the data on searchable snapshots 
+regulation, compliance, or security use cases; stores most of the data on searchable *snapshots* 
 and only the necessary data based on query is pulled and cached on a local disk inside the node.
 
 Node roles that match the different data tiers in Elasticsearch:
@@ -16,6 +16,12 @@ Node roles that match the different data tiers in Elasticsearch:
 - `data_warm`
 - `data_cold`
 - `data_frozen`
+
+See also:
+
+- https://www.elastic.co/guide/en/elasticsearch/reference/current/data-tiers.html
+
+- https://www.elastic.co/blog/elasticsearch-data-lifecycle-management-with-data-tiers
 
 ## How to add a new node to the cluster
 
@@ -78,15 +84,19 @@ node.roles: ["data_frozen"]
 ```
 
 - Create `jvm.options.d/jvm.options` for each new node (as for the cluster) but with less RAM
+```unix
+$ cd elasticsearch-8.15.1/config
+$ sudo -u <username> touch jvm.options.d/jvm.options
+```
 ```
 -Xms2g
 -Xmx2g
 ```
 to avoid the error `Elasticsearch died while starting up, with exit code 137` (see `01-4` for more details).
 
-- If the part `BEGIN SECURITY AUTO CONFIGURATION` exists in `elasticseach.yml`, 
+- (If the part `BEGIN SECURITY AUTO CONFIGURATION` exists in `elasticseach.yml`, 
 remove it completely to avoid skipping security auto-configuration.
-(It appears after the failing node`s first run.)
+It appears after the failing node`s first run.)
 
 - If you don't have enough space on your hard drive, add less space to `elasticsearch.yml` 
 ```yaml
@@ -94,8 +104,8 @@ xpack.searchable.snapshot.shared_cache.size: 8gb
 xpack.searchable.snapshot.shared_cache.size.max_headroom: 512mb
 ```
 
-- If the `elasticsearch.keystore` file exist, remove it completely to avoid aborting auto-configuration.
-(It appears after the failing node`s first run.)
+- (If the `elasticsearch.keystore` file exist, remove it completely to avoid aborting auto-configuration.
+It appears after the failing node`s first run.)
 
 - Generate enrollment tokens (`-s node` specifies enrolling an Elasticsearch node into the cluster) with
 ```unix
@@ -113,6 +123,12 @@ and same for the frozen node
 $ cd /bin/elasticsearch-node-frozen/elasticsearch-8.15.1
 $ sudo -u <username> ./bin/elasticsearch --enrollment-token <enrollment_token>
 ```
+
+Notice:
+
+- For high availability and resilience, you'll need to deploy nodes on separate machines.
+- To fully leverage data tiers, matching infrastructure resources must be allocated for each tier. 
+For instance, warm and cold tiers can use spinning disks rather than SSDs and have a larger RAM-to-disk ratio.
 
 ## How to set up data tiers on Elastic Cloud
 
