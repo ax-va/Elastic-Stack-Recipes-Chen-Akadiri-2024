@@ -36,7 +36,7 @@ def execute_command_with_sudo(command: str):
     print("Error:", stderr)
 
 
-def delete_elastic_stack_element(path: str | Path):
+def remove_directory_with_its_content(path: str | Path):
     execute_command_with_sudo(f'rm -r {path}')
 
 
@@ -47,7 +47,7 @@ def extract_from_tar_gz(file_dir: str | Path, filename: str | Path):
 
 def delete_all_elastic_stack_elements():
     for path in PATHS_TO_INSTALLED_PACKAGES:
-        delete_elastic_stack_element(path)
+        remove_directory_with_its_content(path)
 
 
 def extract_all_elastic_stack_elements_from_tar_gz():
