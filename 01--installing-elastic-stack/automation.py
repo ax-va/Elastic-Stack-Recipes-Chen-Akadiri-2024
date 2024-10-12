@@ -36,12 +36,12 @@ def execute_command_with_sudo(command: str):
     print("Error:", stderr)
 
 
-def remove_directory_with_content(path: str | Path):
-    execute_command_with_sudo(f'rm -r {path}')
+def remove_directory_with_content(dir_path: str | Path):
+    execute_command_with_sudo(f'rm -r {dir_path}')
 
 
-def extract_from_tar_gz(file_dir: str | Path, filename: str | Path):
-    os.chdir(file_dir)
+def extract_from_tar_gz(dir_path: str | Path, filename: str | Path):
+    os.chdir(dir_path)
     execute_command_with_sudo(f'tar -xzf {filename}')
 
 
