@@ -1,5 +1,7 @@
 import os
 import subprocess
+from typing import Iterable, Dict
+
 import yaml
 from pathlib import Path
 
@@ -61,40 +63,73 @@ def write_jvm_options(filepath: Path, options: str):
         f.write(options)
 
 
-def delete_all_elastic_stack_dirs():
-    for path in PATHS_TO_INSTALLED_PACKAGES:
-        remove_directory_with_content(path)
+def delete_elastic_stack_dirs(dir_paths: Iterable[Path] = None):
+    if dir_paths is None:
+        dir_paths = PATHS_TO_INSTALLED_PACKAGES
+
+    for dir_path in dir_paths:
+        remove_directory_with_content(dir_path)
 
 
-def extract_all_elastic_stack_dirs_from_tar_gz():
-    for dir_path in ELASTICSEARCH_DIR_PATH_DICT.values():
+def extract_elasticsearch_dirs_from_tar_gz(dir_paths: Iterable[Path] = None):
+    if dir_paths is None:
+        dir_paths = ELASTICSEARCH_DIR_PATH_DICT.values()
+
+    for dir_path in dir_paths:
         filename = ELASTICSEARCH_PACKAGE + PACKAGE_SPECIFICATION
-        print("Extracting:", str(dir_path / filename))
+        print("Extracting Elasticsearch:", str(dir_path / filename))
         extract_from_tar_gz(dir_path, filename)
-    dir_path = KIBANA_DIR_PATH
+
+
+def extract_kibana_dir_from_tar_gz(dir_path: Path = None):
+    if dir_path is None:
+        dir_path = KIBANA_DIR_PATH
+
     filename = KIBANA_PACKAGE + PACKAGE_SPECIFICATION
-    print("Extracting:", str(dir_path / filename))
+    print("Extracting Kibana:", str(dir_path / filename))
     extract_from_tar_gz(dir_path, filename)
 
 
-def change_owner_of_all_elastic_stack_dirs():
-    for dir_path in ELASTICSEARCH_DIR_PATH_DICT.values():
+def change_owner_of_elasticsearch_dirs(dir_paths: Iterable[Path] = None):
+    if dir_paths is None:
+        dir_paths = ELASTICSEARCH_DIR_PATH_DICT.values()
+
+    for dir_path in dir_paths:
         dir_path = dir_path / ELASTICSEARCH_PACKAGE
-        print("Changing owner of:", str(dir_path))
+        print("Changing owner of Elasticsearch directory:", str(dir_path))
         change_owner(dir_path, secret["owner"])
-    dir_path = KIBANA_DIR_PATH / KIBANA_PACKAGE
-    print("Changing owner of:", str(dir_path))
+
+
+def change_owner_of_kibana_dir(dir_path: Path = None):
+    if dir_path is None:
+        dir_path = KIBANA_DIR_PATH
+
+    dir_path = dir_path / KIBANA_PACKAGE
+    print("Changing owner of Kibana directory:", str(dir_path))
     change_owner(dir_path, secret["owner"])
 
 
-def write_jvm_options_in_all_elasticsearch_configs():
-    for node_name, dir_path in ELASTICSEARCH_DIR_PATH_DICT.items():
+def write_jvm_options_in_elasticsearch_configs(
+        dir_path_dict: Dict[str, Path] = None,
+        jvm_options_dict: Dict[str, str] = None,
+):
+    if dir_path_dict is None:
+        dir_path_dict = ELASTICSEARCH_DIR_PATH_DICT
+
+    if jvm_options_dict is None:
+        jvm_options_dict = JVM_OPTIONS_DICT
+
+
+    for node_name, dir_path in dir_path_dict.items():
         filepath = dir_path / ELASTICSEARCH_PACKAGE / "config/jvm.options.d/jvm.options"
         print("Writing JVM options:", str(filepath))
-        write_jvm_options(filepath, JVM_OPTIONS_DICT[node_name])
+        write_jvm_options(filepath, jvm_options_dict[node_name])
 
 if __name__ == "__main__":
-    # delete_all_elastic_stack_dirs()
-    # extract_all_elastic_stack_dirs_from_tar_gz()
-    # change_owner_of_all_elastic_stack_dirs()
-    write_jvm_options_in_all_elasticsearch_configs()
+    # delete_elastic_stack_dirs()
+    # extract_elasticsearch_dirs_from_tar_gz()
+    # extract_kibana_dir_from_tar_gz()
+    # change_owner_of_elasticsearch_dirs()
+    # change_owner_of_kibana_dir()
+    # write_jvm_options_in_elasticsearch_configs()
+    ...
