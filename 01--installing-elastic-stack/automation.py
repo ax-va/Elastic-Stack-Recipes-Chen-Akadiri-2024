@@ -63,6 +63,23 @@ def write_jvm_options(filepath: Path, options: str):
         f.write(options)
 
 
+def set_transport_host(filepath: Path, host: str = "0.0.0.0"):
+    with open(filepath, "rt") as f:
+        lines = f.readlines()
+        for index, line in enumerate(lines):
+            if "transport.host" in line:
+                lines[index] = f"transport.host: {host}\n"
+                break
+        else:
+            lines.append(f"transport.host: {host}\n")
+
+    if lines:
+        with open(filepath, "wt") as f:
+            f.write("".join(lines))
+    else:
+        print(f"Nothing set in: {filepath}")
+
+
 def delete_elastic_stack_dirs(dir_paths: Iterable[Path] = None):
     if dir_paths is None:
         dir_paths = PATHS_TO_INSTALLED_PACKAGES
@@ -156,6 +173,10 @@ def write_jvm_options_in_elasticsearch_configs(
         filepath = dir_path / elasticsearch_package / "config/jvm.options.d/jvm.options"
         print("Writing JVM options:", str(filepath))
         write_jvm_options(filepath, jvm_options_dict[node_name])
+
+
+def set_transport_host_for_main_elasticsearch_node():
+    set_transport_host(ELASTICSEARCH_DIR_PATH_DICT["main"] / ELASTICSEARCH_PACKAGE / "config/elasticsearch.yml")
 
 
 if __name__ == "__main__":
