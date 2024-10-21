@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 from typing import Iterable, Dict
 
@@ -64,11 +65,13 @@ def write_jvm_options(filepath: Path, options: str):
 
 
 def set_transport_host(filepath: Path, host: str = "0.0.0.0"):
+    pattern = re.compile(r"\s*transport.host")
     with open(filepath, "rt") as f:
         lines = f.readlines()
         for index, line in enumerate(lines):
-            if "transport.host" in line:
-                lines[index] = f"transport.host: {host}\n"
+            match = pattern.search(line)
+            if match:
+                lines[index] = f"{match.group()}: {host}\n"
                 break
         else:
             lines.append(f"transport.host: {host}\n")
