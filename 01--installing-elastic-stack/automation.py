@@ -1,5 +1,6 @@
 import os
 import re
+import select
 import subprocess
 from typing import Iterable, Dict
 
@@ -31,19 +32,73 @@ JVM_OPTIONS_DICT = {
 }
 
 
-def execute_command_with_sudo(command: str):
-    # Use `subprocess.Popen` to run the command with sudo
-    process = subprocess.Popen(
-        ['sudo', '-S'] + command.split(), # '-S' reads the password from stdin
-        stdin=subprocess.PIPE, # Connect stdin for password input
-        stdout=subprocess.PIPE, # Capture standard output
-        stderr=subprocess.PIPE, # Capture standard error
-        text=True # Return output as text
-    )
-    # Pass the password to the process via stdin
-    stdout, stderr = process.communicate(input=secret["sudo_password"] + '\n')
-    print("Output:", stdout)
-    print("Error:", stderr)
+def execute_command_with_sudo(command: str, sudo_password: str = None):
+    if sudo_password is None:
+        sudo_password = secret["sudo_password"]
+
+    try:
+        # Use `subprocess.Popen` to run the command with sudo
+        process = subprocess.Popen(
+            ['sudo', '-S'] + command.split(),  # '-S' reads the password from stdin
+            stdin=subprocess.PIPE,  # Connect stdin for password input
+            stdout=subprocess.PIPE,  # Capture standard output
+            stderr=subprocess.PIPE,  # Capture standard error
+            text=True  # Return output as text
+        )
+        # Pass the password to the process via stdin
+        stdout, stderr = process.communicate(input=f"{sudo_password}\n")
+        print("Output:", stdout)
+        print("Error:", stderr)
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+
+def execute_command_with_sudo_as_user_and_stream_logs(
+        command: str,
+        sudo_password: str = None,
+        username: str = None,
+):
+    """ ToDo: does not work """
+
+    if sudo_password is None:
+        sudo_password = secret["sudo_password"]
+
+    if username is None:
+        username = secret["username"]
+
+    try:
+        process = subprocess.Popen(
+            ['sudo', '-S', '-u', username] + command.split(),  # '-S' reads the password from stdin
+            stdin=subprocess.PIPE,  # Connect stdin for password input
+            stdout=subprocess.PIPE,  # Capture standard output
+            stderr=subprocess.PIPE,  # Capture standard error
+            bufsize=1,  # Line-buffered output
+            preexec_fn=os.setsid,  # Run command in a new process group
+            universal_newlines=True  # Decode stdout/stderr as text instead of bytes
+        )
+
+        # Send the password to the process
+        process.stdin.write(f"{sudo_password}\n")
+        process.stdin.flush()
+
+        # Use select to read both stdout and stderr without blocking
+        while True:
+            reads = [process.stdout, process.stderr]
+            readable, _, _ = select.select(reads, [], [])
+
+            for stream in readable:
+                output = stream.readline()
+                if output:
+                    log = output.strip()
+                    print(f"Streaming logs: {log}")
+                    yield log
+                else:
+                    print(f"Streaming logs finished.")
+                    return
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
 
 
 def remove_directory_with_content(dir_path: Path):
@@ -55,8 +110,8 @@ def extract_from_tar_gz(dir_path: Path, filename: str):
     execute_command_with_sudo(f'tar -xzf {filename}')
 
 
-def change_owner(dir_path: Path, owner: str):
-    execute_command_with_sudo(f'chown -R {owner}:{owner} {dir_path}')
+def change_owner(dir_path: Path, username: str):
+    execute_command_with_sudo(f'chown -R {username}:{username} {dir_path}')
 
 
 def write_jvm_options(filepath: Path, options: str):
@@ -81,6 +136,12 @@ def set_transport_host(filepath: Path, host: str = "0.0.0.0"):
             f.write("".join(lines))
     else:
         print(f"Nothing to set in: {filepath}")
+
+
+def run_elasticsearch_node_and_stream_logs(dir_path: Path):
+    """ ToDo: does not work """
+    for log in execute_command_with_sudo_as_user_and_stream_logs(str(dir_path / "bin/elasticsearch")):
+        yield log
 
 
 def delete_elastic_stack_dirs(dir_paths: Iterable[Path] = None):
@@ -133,19 +194,27 @@ def extract_kibana_dir_from_tar_gz(
 def change_owner_of_elasticsearch_dirs(
         dir_paths: Iterable[Path] = None,
         elastcisearch_package: str = None,
+        username: str = None,
 ):
     if dir_paths is None:
         dir_paths = ELASTICSEARCH_DIR_PATH_DICT.values()
 
+    if elastcisearch_package is None:
+        elastcisearch_package = ELASTICSEARCH_PACKAGE
+
+    if username is None:
+        username = secret["username"]
+
     for dir_path in dir_paths:
         dir_path = dir_path / elastcisearch_package
-        print("Changing owner of Elasticsearch directory:", str(dir_path))
-        change_owner(dir_path, secret["owner"])
+        print(f"Changing owner of Elasticsearch directory to '{username}':", str(dir_path))
+        change_owner(dir_path, username)
 
 
 def change_owner_of_kibana_dir(
         dir_path: Path = None,
         kibana_package: str = None,
+        username: str = None,
 ):
     if dir_path is None:
         dir_path = KIBANA_DIR_PATH
@@ -153,9 +222,12 @@ def change_owner_of_kibana_dir(
     if kibana_package is None:
         kibana_package = KIBANA_PACKAGE
 
+    if username is None:
+        username = secret["username"]
+
     dir_path = dir_path / kibana_package
-    print("Changing owner of Kibana directory:", str(dir_path))
-    change_owner(dir_path, secret["owner"])
+    print(f"Changing owner of Kibana directory to '{username}':", str(dir_path))
+    change_owner(dir_path, username)
 
 
 def write_jvm_options_in_elasticsearch_configs(
@@ -182,6 +254,13 @@ def set_transport_host_for_main_elasticsearch_node():
     set_transport_host(ELASTICSEARCH_DIR_PATH_DICT["main"] / ELASTICSEARCH_PACKAGE / "config/elasticsearch.yml")
 
 
+def run_main_elasticsearch_node_and_stream_logs():
+    """ ToDo: does not work """
+    path_to_main_elasticsearch_node = ELASTICSEARCH_DIR_PATH_DICT["main"] / ELASTICSEARCH_PACKAGE
+    for log in run_elasticsearch_node_and_stream_logs(path_to_main_elasticsearch_node):
+        yield log
+
+
 if __name__ == "__main__":
     # delete_elastic_stack_dirs()
     # extract_elasticsearch_dirs_from_tar_gz()
@@ -189,4 +268,5 @@ if __name__ == "__main__":
     # change_owner_of_elasticsearch_dirs()
     # change_owner_of_kibana_dir()
     # write_jvm_options_in_elasticsearch_configs()
+    # run_main_elasticsearch_node_and_stream_logs()  # ToDo: does not work
     ...

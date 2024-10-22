@@ -22,6 +22,8 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html
 
 - Download and unzip `.tar.gz`
 
+https://www.elastic.co/de/de/downloads/elasticsearch
+
 ```unix
 $ cd /bin
 $ sudo mkdir elasticsearch
