@@ -16,7 +16,7 @@ https://www.elastic.co/de/downloads/kibana
 
 ## Install Elasticsearch
 
-- How to install on Posix
+- How to install
 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/targz.html
 
@@ -34,12 +34,18 @@ $ sudo tar -xzf elasticsearch-8.15.1-linux-x86_64.tar.gz
 
 ## Install Kibana
 
+- How to install
+
+https://www.elastic.co/guide/en/kibana/current/targz.html
+
 - Download and unzip `.tar.gz`
+
+https://www.elastic.co/de/en/en/downloads/kibana
 
 ```unix
 $ cd /bin
 $ sudo mkdir kibana
-$ sudo mv /home/delorian/Downloads/kibana-8.15.1-linux-x86_64.tar.gz /bin/kibana
+$ sudo mv /home/<my_name>/Downloads/kibana-8.15.1-linux-x86_64.tar.gz /bin/kibana
 $ cd kibana
 $ sudo tar -xzf kibana-8.15.1-linux-x86_64.tar.gz
 ```
