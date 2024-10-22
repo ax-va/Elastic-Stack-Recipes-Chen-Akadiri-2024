@@ -80,7 +80,7 @@ def set_transport_host(filepath: Path, host: str = "0.0.0.0"):
         with open(filepath, "wt") as f:
             f.write("".join(lines))
     else:
-        print(f"Nothing set in: {filepath}")
+        print(f"Nothing to set in: {filepath}")
 
 
 def delete_elastic_stack_dirs(dir_paths: Iterable[Path] = None):
