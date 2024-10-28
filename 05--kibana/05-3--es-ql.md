@@ -9,7 +9,7 @@ from <data_view>
 | limit 50
 ```
 
-## stats...by, sort, eval, keep
+## STATS...BY, SORT, EVAL, KEEP
 
 Use `stats...by` to average `traveltime.duration` in `denomination` groups and 
 `sort` to sort in descending order
@@ -35,7 +35,7 @@ from metrics-rennes_traffic-raw
 ```
 -> The `denomination` and `avg_traveltime_min` fields will be shown.
 
-## enrich
+## ENRICH
 
 An enrich policy defines how to combine multiple indices for enrichment.
 
@@ -109,4 +109,3 @@ from metrics-rennes_traffic-raw
 | sort avg_traveltime desc
 | limit 50
 ```
-
