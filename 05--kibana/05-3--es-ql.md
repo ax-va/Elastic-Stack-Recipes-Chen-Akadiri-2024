@@ -9,7 +9,7 @@ from <data_view>
 | limit 50
 ```
 
-Use `stats...by` to average `traveltime.duration` in the `denomination` groups and 
+Use `stats...by` to average `traveltime.duration` in `denomination` groups and 
 `sort` to sort in descending order
 ```es|ql
 from metrics-rennes_traffic-raw
