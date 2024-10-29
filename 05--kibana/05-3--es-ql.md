@@ -1,13 +1,36 @@
 # ES|QL
 
-Press `Ctrl + Enter` to run *ES|QL*.
-
-Chain processing with the pipe (`|`)
+An *ES|QL* query is composed of a series of commands chained together by pipes (`|`) like this
 ```es|ql
 from <data_view>
 | where <field> == <value>
 | limit 50
 ```
+
+Press `Ctrl + Enter` to run *ES|QL*.
+
+## Commands
+
+There are two types of commands:
+
+- *source commands* to retrieve or generate data in the form of tables;
+
+- *processing commands* to take a table as input and produce a new table as output.
+
+| Source commands | Processing commands |
+|-----------------|---------------------|
+| `FROM`          | `DISSECT`           |
+| `ROW`           | `DROP`              |
+| `SHOW`          | `ENRICH`            |
+|                 | `EVAL`              |
+|                 | `GROK`              |
+|                 | `KEEP`              |
+|                 | `LIMIT`             |
+|                 | `MV_EXPAND`         |
+|                 | `RENAME`            |
+|                 | `SORT`              |
+|                 | `STATS...BY`        |
+|                 | `WHERE`             |
 
 ## STATS...BY, SORT, EVAL, KEEP
 
@@ -37,9 +60,26 @@ from metrics-rennes_traffic-raw
 
 ## ENRICH
 
-An enrich policy defines how to combine multiple indices for enrichment.
+- Explanation:
+```
+                                                                              |
+                                                                          input table
+                                                                              V
+[Source Indices] -> [Enrich Policy] -produces-> [Enrich Index] <-query- [Erich Command]
+                                                                              |
+                                                                          output table
+                                                                              V
+```
 
-To set up the source index used for enrichment:
+1. There should be at least one *source index*, which contains the enrich data 
+the `ENRICH` command will use to add data to the input tables.
+
+2. The *enrich index* is a read-only internal Elasticsearch-managed index to increase performance.
+
+3. The *enrich policy* is a set of configurations describing how to add the enrich data to the input table.
+
+- How to set up the source index used for enrichment:
+
 1. In **Kibana**, navigate to **Home** -> **Upload a file** and select `05--kibana/data/insee-postal-codes.csv`.
 
 2. On the **Import data** page, click on the **Advanced** tab, name the index `enrich-insee-codes`, and replace the default **Mappings** with:
@@ -109,3 +149,9 @@ from metrics-rennes_traffic-raw
 | sort avg_traveltime desc
 | limit 50
 ```
+
+## See also:
+
+- https://elasticsearch-benchmarks.elastic.co/#tracks/esql/nightly/default/90d
+
+- https://www.elastic.co/blog/introduction-to-esql-new-query-language-flexible-iterative-analytics

@@ -2,8 +2,13 @@
 
 In Kibana version 8.11, *ES|QL* was added to execute a variety of data operations, 
 including *filtering*, *aggregation*, and *time series analysis*, among others.
+It is based on a completely new computing architecture for more performance.
 
 **ILM = Index Lifecycle Management**
+
+**Kibana Lens**
+
+Kibana Lens is the fastest way to visualize data within Kibana.
 
 **KQL = Kibana Query Language**
 
