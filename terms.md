@@ -18,3 +18,12 @@ Lucene syntax is a powerful query language used by Apache Lucene for more advanc
 like with regex or fuzzy queries, which forms the foundation of search engines like *Elasticsearch* and *Apache Solr*.
 
 **TSDS = Time Series Data Stream**
+
+**TSVB = Time Series Visual Builder**
+
+TSVB is deprecated in Elastic Stack 8.x. Use Kibana Lens instead.
+
+See also:
+
+- How to convert the existing TSVB visualizations to Kibana Lens visualizations: 
+https://www.elastic.co/guide/en/kibana/current/tsvb.html#edit-visualizations-in-lens
