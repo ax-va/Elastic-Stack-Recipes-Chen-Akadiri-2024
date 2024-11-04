@@ -6,7 +6,7 @@ Kibana Lens offers a UI for creating charts.
 
 Use the drag-and-drop actions for data-view fields on the left panel and chart configurations on the right panel.
 
-## Formula
+## Kibana Formula
 
 **Formula** offers to combine aggregation and mathematical functions, e.g.,
 
@@ -21,7 +21,7 @@ See also:
 
 https://www.elastic.co/blog/kibana-10-common-questions-formulas-time-series-maps
 
-## Sampling
+## Kibana Sampling
 
 **Sampling** reduces the number of documents used for the aggregation.
 This feature is based on random sampler aggregation.
@@ -30,7 +30,7 @@ The **Sampling** rate can be adjusted in **Layer settings**.
 See also: 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-random-sampler-aggregation.html
 
-## Annotation
+## Kibana Annotation
 
 E.g., in **Annotation query**, setting
 ```
